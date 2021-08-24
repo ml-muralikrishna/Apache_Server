@@ -1,6 +1,11 @@
 ---
 - name: Install Apache
   apt: pkg="apache2={{ apache_version }}" state=present
+  when: ansible_os_family == "Debian"
+  
+- name: Install Httpd
+  yum: pkg="httpd={{ httpd_version }}" state=present
+  when: anisble_os_family == "RedHat"
 
 - name: Configure Apache
   template: src=ports.conf.j2 dest=/etc/apache2/ports.conf
