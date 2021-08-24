@@ -6,23 +6,3 @@
 - name: Install Httpd
   yum: pkg="httpd={{ httpd_version }}" state=present
   when: anisble_os_family == "RedHat"
-
-- name: Configure Apache
-  template: src=ports.conf.j2 dest=/etc/apache2/ports.conf
-  notify:
-    - Restart Apache
-
-- name: Delete default site
-  command: a2dissite 000-default
-  register: a2dissite
-  failed_when: >
-    a2dissite.rc != 0 and "000-default already" not in a2dissite.stdout
-  changed_when: >
-    a2dissite.rc == 0 and "000-default disabled" in a2dissite.stdout
-  when: apache_delete_default_site | bool
-  notify:
-    - Restart Apache
-
-- name: Delete default web root
-  file: path=/var/www/html state=absent
-  when: apache_delete_default_site | bool and a2dissite | changed
