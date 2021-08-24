@@ -4,4 +4,4 @@
    Tasks:
      - name: "Install web server"
        include_role:
-         name: "Tasks"
+         name: "tasks"
